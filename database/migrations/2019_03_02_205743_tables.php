@@ -13,12 +13,12 @@ class Tables extends Migration
      */
     public function up()
     {
-        Schema::create('dishes' , function($myTable){
+        Schema::create('users' , function($myTable){
 
             $myTable -> increments('id');
-            $myTable -> string('name_dish');
-            $myTable -> float('prix');
-            $myTable -> string('Ingredients');
+            $myTable -> string('name');
+            $myTable -> string('email');
+            $myTable -> string('password');
             $myTable -> timestamps();
          
          });
@@ -31,6 +31,6 @@ class Tables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('users');
     }
 }

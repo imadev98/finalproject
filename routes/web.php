@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Schema;
 | and give it the Closure to call when that URI is requested.
 |
 */
+$router->post('/auth/login', 'AuthController@Login');
+
+//$router->post('/auth/login', 'AuthController@register');
 
 
 $router->get('/', function () use ($router) {
@@ -24,12 +27,7 @@ $router->get('foo', function () {
 });
 
 
-$router->post(
-    'auth/login', 
-    [
-       'uses' => 'LoginController@authenticate'
-    ]
-);
+
  
 $router->post('/login', 'LoginController@login');
 $router->post('/register', 'UserController@register');

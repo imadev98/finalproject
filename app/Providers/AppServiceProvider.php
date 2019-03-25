@@ -13,9 +13,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment() == 'local') {
-            $this->app->register('Wn\Generators\CommandsServiceProvider');
-        }
+       // if ($this->app->environment() == 'local') {
+           // $this->app->register('Wn\Generators\CommandsServiceProvider');
+        //}
+
+        $this->app->register(\Tymon\JWTAuth\Providers\LumenServiceProvider::class);
     }
 
 

@@ -1,8 +1,8 @@
-//test
+<?php 
 
-<?php namespace App;
+namespace App;
 
-//helloworld!
+
 
 use Illuminate\Database\Eloquent\Model;
 
