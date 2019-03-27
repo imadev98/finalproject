@@ -22,24 +22,23 @@ class ResrvationsController extends Controller {
                 'nbpersone' => 'required',
                 'arrive_at'=> 'required'
            ]);
-          
            $emplacment = $request->input('emplacment');
            $nbpersone  = $request->input('nbpersone');
            $arrive_at = $request->input('arrive_at');
            $time = $arrive_at ;
-           
            //hna ychof ida kayna table yhwas aliha ida lgach yglo mkanch 
             $name= Table::where('emplacment', '=' ,$emplacment )->where('capacity', '=' ,$nbpersone )->where('status', '=' , 1 )->first();
             if($name==null){
                 return "sorry no table " ;
-                //ba3dha yhwas ida hadi tabla li yhwas aliha mahkoma fi had wa9t yglo bli thkmat 
+                
             }
+            //ba3dha yhwas ida hadi tabla li yhwas aliha mahkoma fi had wa9t yglo bli thkmat  
                 $count = 00;
                 $k=0;
-                while( $k <=60){
-                    $timeplus = date('Y-m-d H:i:s',strtotime("+$count minute ",strtotime($time)));
-                    $timemins = date('Y-m-d H:i:s',strtotime("-$count minute ",strtotime($time)));
-                    $dateplus = Reservation::where('arrive_at','=',$timeplus)->first();
+                while( $k <=60){ //hna yhwas kol d9i9aa 
+                    $timeplus = date('Y-m-d H:i:s',strtotime("+$count minute ",strtotime($time)));//hna yhwas b zyada ida kyn 
+                    $timemins = date('Y-m-d H:i:s',strtotime("-$count minute ",strtotime($time)));//hna yhwas b tn9as ida kyn
+                    $dateplus = Reservation::where('arrive_at','=',$timeplus)->first(); //test fi base de donne
                     $dateminus = Reservation::where('arrive_at','=',$timemins)->first();
                  if($dateplus || $dateminus){
                     return "sorry the table taken  ";
@@ -47,16 +46,15 @@ class ResrvationsController extends Controller {
                  $count= $count +1;
                  $k++;     
              }
+
               $user_id = Auth::user()->id;
-            $table = Reservation::create([
+              $table = Reservation::create([
                 'user_id' =>$user_id,
                 'table_id' =>$name->id ,
                  'status' =>'confirmed',
                  'arrive_at'=>$arrive_at
             ]);
            return"Great! your table is : '$name' , now please insert your demande "; 
-
-
             }
         public function demande(Request $request)
     {
