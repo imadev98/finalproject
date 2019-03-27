@@ -5,6 +5,7 @@ use App\Reservation;
 use App\Table;
 use App\Reqest;
 use App\Dishe;
+use Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Validator;
@@ -15,16 +16,7 @@ class ResrvationsController extends Controller {
      * Register new user
      *
      * @param $request Request
-     */   
-     
-
-
-     
-    
-
-     public function reserver(Request $request)
-    {      
-            
+     */ public function reserver(Request $request){      
              $this->validate($request, [
                 'emplacment'=> 'required',
                 'nbpersone' => 'required',
@@ -34,35 +26,38 @@ class ResrvationsController extends Controller {
            $emplacment = $request->input('emplacment');
            $nbpersone  = $request->input('nbpersone');
            $arrive_at = $request->input('arrive_at');
+           $time = $arrive_at ;
            
            //hna ychof ida kayna table yhwas aliha ida lgach yglo mkanch 
             $name= Table::where('emplacment', '=' ,$emplacment )->where('capacity', '=' ,$nbpersone )->where('status', '=' , 1 )->first();
             if($name==null){
                 return "sorry no table " ;
-
                 //ba3dha yhwas ida hadi tabla li yhwas aliha mahkoma fi had wa9t yglo bli thkmat 
-            }elseif($date = Reservation::where('arrive_at','=',$arrive_at)->where('table_id', '=' ,$name->id )->first()){
-                return "sorry the table taken  ";
-
-                //ida mahich mahkoma w kayna haya ydir reservation :D nrmlmnt hka 
-            }else{
+            }
+                $count = 00;
+                $k=0;
+                while( $k <=60){
+                    $timeplus = date('Y-m-d H:i:s',strtotime("+$count minute ",strtotime($time)));
+                    $timemins = date('Y-m-d H:i:s',strtotime("-$count minute ",strtotime($time)));
+                    $dateplus = Reservation::where('arrive_at','=',$timeplus)->first();
+                    $dateminus = Reservation::where('arrive_at','=',$timemins)->first();
+                 if($dateplus || $dateminus){
+                    return "sorry the table taken  ";
+                 }
+                 $count= $count +1;
+                 $k++;     
+             }
+              $user_id = Auth::user()->id;
             $table = Reservation::create([
-                'user_id' => 1,
+                'user_id' =>$user_id,
                 'table_id' =>$name->id ,
                  'status' =>'confirmed',
                  'arrive_at'=>$arrive_at
             ]);
+           return"Great! your table is : '$name' , now please insert your demande "; 
 
-            
-           
-           return"Great! your table is : '$name' , now please insert your demande ";
-           
-          
+
             }
-            
-        }
-
-   
         public function demande(Request $request)
     {
 

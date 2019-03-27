@@ -13,12 +13,15 @@ class Tables extends Migration
      */
     public function up()
     {
-        Schema::create('users' , function($myTable){
+        Schema::create('reservation' , function($myTable){
 
             $myTable -> increments('id');
-            $myTable -> string('name');
-            $myTable -> string('email');
-            $myTable -> string('password');
+            $myTable-> integer('user_id')->unsigned();
+            $myTable-> integer('table_id')->unsigned();
+            $myTable-> string('status');
+            $myTable-> datetime('arrive_at');
+            $myTable-> foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $myTable-> foreign('table_id')->references('id')->on('tables')->onDelete('cascade');
             $myTable -> timestamps();
          
          });

@@ -1,7 +1,13 @@
 <?php
 
+
+
+
+
 namespace App\Http\Controllers;
 use App\User;
+
+use Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -25,7 +31,7 @@ class AuthController extends Controller
 
         $this->validate($request, [
            'name'=> 'required',
-           'email'    => 'required|email|max:255',
+           'email'    => 'required|email|max:255|unique:users',
            'password' => 'required'
      ]);
      $table = User::create([
@@ -68,6 +74,22 @@ class AuthController extends Controller
 
         return response()->json(compact('token'));
     }
+
+
+
+    public function test()
+    {
+
+       // $token = $this->jwt->getToken();
+      //  $this->jwt->user();
+       // $data = $this->jwt->setToken($token)->toUser();
+       // print_r($data);
+        echo "hi now you are in :p ";
+
+    }
+
+
+
     
 }
        

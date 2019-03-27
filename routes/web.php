@@ -12,7 +12,22 @@ use Illuminate\Support\Facades\Schema;
 */
 $router->post('/auth/login', 'AuthController@Login');
 
-//$router->post('/auth/login', 'AuthController@register');
+$router->post('/aut/login', 'AuthController@register');
+
+
+
+
+
+$router->post('/at/login', 'AuthController@updateProfile');
+
+$router->group(['middleware' => 'auth'], function ($router) {
+
+     $router->get('/test5', 'AuthController@test');
+     $router->post('/reservation', 'ResrvationsController@reserver');
+   
+    
+    });
+    
 
 
 $router->get('/', function () use ($router) {
@@ -33,7 +48,7 @@ $router->post('/login', 'LoginController@login');
 $router->post('/register', 'UserController@register');
 
 
-$router->post('/reservation', 'ResrvationsController@reserver');
+
 $router->get('/reservation', 'ResrvationsController@reserver');
 $router->put('/reservation', 'ResrvationsController@reserver');
 $router->delete('/reservation', 'ResrvationsController@annuler');
@@ -42,12 +57,7 @@ $router->delete('/reservation', 'ResrvationsController@annuler');
 $router->post('/demande', 'ResrvationsController@demande');
 
 
-$router->group(['prefix' => 'admin'], function () use ($router) {
-    $router->get('users', function ()    {
-        $router->put('/hello', 'TestController@a');
-         $router->get('/test', 'TestController@b'); 
-    });
-});
+
 
 
 $router->post('/gestion', 'GestionsController@show');
