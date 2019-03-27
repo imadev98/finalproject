@@ -38,8 +38,8 @@ class ResrvationsController extends Controller {
                 while( $k <=60){ //hna yhwas kol d9i9aa 
                     $timeplus = date('Y-m-d H:i:s',strtotime("+$count minute ",strtotime($time)));//hna yhwas b zyada ida kyn 
                     $timemins = date('Y-m-d H:i:s',strtotime("-$count minute ",strtotime($time)));//hna yhwas b tn9as ida kyn
-                    $dateplus = Reservation::where('arrive_at','=',$timeplus)->first(); //test fi base de donne
-                    $dateminus = Reservation::where('arrive_at','=',$timemins)->first();
+                    $dateplus = Reservation::where('arrive_at','=',$timeplus,'table_id','=',$name->id)->first(); //test fi base de donne
+                    $dateminus = Reservation::where('arrive_at','=',$timemins,'table_id','=',$name->id)->first();
                  if($dateplus || $dateminus){
                     return "sorry the table taken  ";
                  }
