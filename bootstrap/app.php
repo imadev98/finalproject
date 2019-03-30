@@ -91,7 +91,6 @@ $app->singleton(Illuminate\Session\SessionManager::class, function () use ($app)
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
-
 $app->configure('session');
 $app->register(Illuminate\Session\SessionServiceProvider::class); $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(App\Providers\EventServiceProvider::class);

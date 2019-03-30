@@ -71,3 +71,7 @@ $router->post('/test', 'TestController@addmesimpay');
 
 
 
+$router->post('/delivery', 'DeliveryController@delivery_now');
+
+
+

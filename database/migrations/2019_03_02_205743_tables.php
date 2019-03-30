@@ -13,18 +13,22 @@ class Tables extends Migration
      */
     public function up()
     {
-        Schema::create('reservation' , function($myTable){
+        Schema::create('deliverys' , function($myTable){
 
             $myTable -> increments('id');
             $myTable-> integer('user_id')->unsigned();
-            $myTable-> integer('table_id')->unsigned();
+            $myTable-> integer('deliverer _id')->unsigned();
+            $myTable-> integer('vehicle_id')->unsigned();
+            $myTable-> string('Address');
+            $myTable-> string('delivery_at');
             $myTable-> string('status');
-            $myTable-> datetime('arrive_at');
             $myTable-> foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $myTable-> foreign('table_id')->references('id')->on('tables')->onDelete('cascade');
+            $myTable-> foreign('deliverer _id')->references('id')->on('users')->onDelete('cascade');
+            $myTable-> foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $myTable -> timestamps();
          
          });
+    
     }
 
     /**
