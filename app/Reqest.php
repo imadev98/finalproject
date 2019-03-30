@@ -2,7 +2,7 @@
 
 namespace App;
 
-//test
+
 
 use Illuminate\Database\Eloquent\Model;
 
