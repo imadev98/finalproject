@@ -18,16 +18,16 @@ class ResrvationsController extends Controller {
      * @param $request Request
      */ public function reserver(Request $request){      
              $this->validate($request, [
-                'emplacment'=> 'required',
+                'position'=> 'required',
                 'nbpersone' => 'required',
                 'arrive_at'=> 'required'
            ]);
-           $emplacment = $request->input('emplacment');
+           $position = $request->input('position');
            $nbpersone  = $request->input('nbpersone');
            $arrive_at = $request->input('arrive_at');
            $time = $arrive_at ;
            //hna ychof ida kayna table yhwas aliha ida lgach yglo mkanch 
-            $name= Table::where('emplacment', '=' ,$emplacment )->where('capacity', '=' ,$nbpersone )->where('status', '=' , 1 )->first();
+            $name= Table::where('position', '=' ,$position )->where('capacity', '=' ,$nbpersone )->where('status', '=' , 1 )->first();
             if($name==null){
                 return "sorry no table " ;
                 
@@ -58,43 +58,37 @@ class ResrvationsController extends Controller {
                  'status' =>'confirmed',
                  'arrive_at'=>$arrive_at
             ]);
-
            return"Great! your table is : '$name' , now please insert your demande "; 
-            }
-
+              }
         public function demande(Request $request){
-            $reservation_id = Reservation::orderBy('created_at', 'desc')->first();
-         
+        $reservation_id = Reservation::orderBy('created_at', 'desc')->first();
         $this->validate($request, [
            'name_dish'=> 'required',
             'Additions' => 'required',
             'Quantity' => 'required'
      ]);
-    
-     
      $name_dish = $request->input('name_dish');
      $Additions  = $request->input('Additions');
      $Quantity = $request->input('Quantity');
-       
-
      $table = Reqest::create([
         'user_id' => $reservation_id->user_id,
         'dish_id' =>1,
          'Additions' =>$Additions,
          'Quantity'=>$Quantity,
          'reservation_id' => $reservation_id->id
-
     ]);
-
-      
-   
-     
-     
      return 'thanks for order :D !';
-
-       
-       
      //  return $name;
+    }
+   //show_all_reservation
+    public function showAll(){
+        $allres=Reservation::all();
+        //for( $i=9 ; $i >= 10; $i++){
+        //$find=$alltables[$i]->id;
+        //return $i;
+        //}
+        //$find = Table::find(9);
+                return $allres;
     }
    //delete reservation
     public function annuler(Request $request , Reservation $reservation)

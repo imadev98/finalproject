@@ -15,96 +15,57 @@ class GestionsController extends Controller {
     public $k = 0;
      public function ajouter(Request $request)
     {
-        
-
-        
         $this->validate($request, [
-            'emplacment'=> 'required',
+            'position'=> 'required',
             'capacity'=> 'required',
-            'status'=>'required'
-            
+            'status'=>'required'   
         ]);
-
-        $emplacment = $request->input('emplacment');
+        $position = $request->input('position');
         $capacity =$request->input('capacity');
         $status = $request->input('status');
         $table = Table::create([
-            'emplacment' => $emplacment,
+            'position' => $position,
             'capacity' => $capacity,
             'status' => $status        
         ]);
-
-       
-      
         $table=Table::first();
         //$token=JWTAuth::formUser($user);
         //return Response::json( compact('token'));
         return 'Table est ajouter  !  ';
     }
-   
-
     public function showall(){
-
         $alltables=Table::all();
         //for( $i=9 ; $i >= 10; $i++){
         //$find=$alltables[$i]->id;
         //return $i;
         //}
         //$find = Table::find(9);
-                foreach($alltables as  $all){
-                    echo "Table '$all->id'";
-                }
-        
-        
-
+                return $alltables;
     }
 
     public function edit($id){
         $table = Table::find($id);
-        
-        
-      
-       
-
 //echo "$table->capacity"; 
 //echo " $table->emplacment ";
 //echo " $table->status";
     }
-
-
-      
-
-    public function showBySort(){
-      
-       
-    }
-
-
-
-     
-
-
-
-
     //update Table
     public function update(Request $request , $id)
     {
         $table= Table::find($id);
         $this->validate($request, [
-             
              'capacity' ,
-             'emplacment',
+             'position',
              'status'
-           
         ]);
         $capacity =$request->input('capacity');
-        $emplacment =$request->input('emplacment');
+        $emplacment =$request->input('position');
         $status =$request->input('status');
         if($capacity!=null ){
         $table->capacity =$capacity;
        }
-       if($emplacment!=null){
-          $table->emplacment =$emplacment;
+       if($position!=null){
+          $table->position =$position;
        }
        if($status!=null){
         $table->status =$status;

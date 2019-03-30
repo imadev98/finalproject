@@ -6,7 +6,7 @@ class Table extends Model {
 
     protected $fillable = [
 
-        'emplacment','capacity', 'status'
+        'position','capacity', 'status'
     ];
 
     protected $dates = [];
