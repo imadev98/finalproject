@@ -60,10 +60,10 @@ $router->post('/demande', 'ResrvationsController@demande');
 
 
 
-$router->post('/gestion', 'GestionsController@show');
+$router->post('/gestion', 'GestionsController@ajouter');
 $router->get('/gestion', 'GestionsController@showall');
 $router->put('/gestion/{id}', 'GestionsController@update');
-$router->get('/gestion/{id}', 'GestionsController@show');
+$router->get('/gestion/{id}', 'GestionsController@edit');
 $router->delete('/gestion', 'GestionsController@ajouter');
 $router->get('/user/{id}', ['middleware' => 'auth', 'uses' =>  'UserController@get_user']);
 

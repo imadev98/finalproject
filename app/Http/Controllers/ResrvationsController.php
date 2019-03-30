@@ -35,13 +35,17 @@ class ResrvationsController extends Controller {
             //ba3dha yhwas ida hadi tabla li yhwas aliha mahkoma fi had wa9t yglo bli thkmat  
                 $count = 00;
                 $k=0;
-                while( $k <=60){ //hna yhwas kol d9i9aa 
-                    $timeplus = date('Y-m-d H:i:s',strtotime("+$count minute ",strtotime($time)));//hna yhwas b zyada ida kyn 
-                    $timemins = date('Y-m-d H:i:s',strtotime("-$count minute ",strtotime($time)));//hna yhwas b tn9as ida kyn
-                    $dateplus = Reservation::where('arrive_at','=',$timeplus,'table_id','=',$name->id)->first(); //test fi base de donne
-                    $dateminus = Reservation::where('arrive_at','=',$timemins,'table_id','=',$name->id)->first();
+                while( $k <=30){ //hna yhwas kol d9i9aa 
+                    $timeplus = date('Y-m-d H:i:s',strtotime("+$count minute ",strtotime($time)));
+
+                    
+                    $timemins = date('Y-m-d H:i:s',strtotime("-$count minute ",strtotime($time)));
+                    
+                    $dateplus = Reservation::where('arrive_at','=',$timeplus)->where('table_id','=',$name->id)->first(); 
+                    
+                    $dateminus = Reservation::where('arrive_at','=',$timemins)->where('table_id','=',$name->id)->first();
                  if($dateplus || $dateminus){
-                    return "sorry the table taken  ";
+                    return "sorry the table taken ";
                  }
                  $count= $count +1;
                  $k++;     
@@ -54,17 +58,19 @@ class ResrvationsController extends Controller {
                  'status' =>'confirmed',
                  'arrive_at'=>$arrive_at
             ]);
+
            return"Great! your table is : '$name' , now please insert your demande "; 
             }
-        public function demande(Request $request)
-    {
 
+        public function demande(Request $request){
+            $reservation_id = Reservation::orderBy('created_at', 'desc')->first();
+         
         $this->validate($request, [
            'name_dish'=> 'required',
             'Additions' => 'required',
             'Quantity' => 'required'
      ]);
-
+    
      
      $name_dish = $request->input('name_dish');
      $Additions  = $request->input('Additions');
@@ -72,11 +78,11 @@ class ResrvationsController extends Controller {
        
 
      $table = Reqest::create([
-        'user_id' => 1,
-        'dish_id' =>1 ,
+        'user_id' => $reservation_id->user_id,
+        'dish_id' =>1,
          'Additions' =>$Additions,
          'Quantity'=>$Quantity,
-         'reservation_id' => 25
+         'reservation_id' => $reservation_id->id
 
     ]);
 

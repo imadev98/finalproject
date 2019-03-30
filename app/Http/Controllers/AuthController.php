@@ -32,11 +32,13 @@ class AuthController extends Controller
         $this->validate($request, [
            'name'=> 'required',
            'email'    => 'required|email|max:255|unique:users',
+           'deliverer',
            'password' => 'required'
      ]);
      $table = User::create([
         'name' =>  $request->input('name'),
         'email' =>$request->input('email'),
+        'deliverer' =>$request->input('deliverer'),
          'password' =>Hash::make($request->input('password'))
 
     ]);
