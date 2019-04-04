@@ -1,11 +1,15 @@
-<?php namespace App;
+<?php 
+
+namespace App;
+
+//test
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dishe extends Model {
+class Reqests_Delivery extends Model {
 
     protected $fillable = [
-        'name','Ingredients','prix','Quantity','Category'
+        'user_id','delivery_id','dish_id','Quantity'
     ];
 
     protected $dates = [];

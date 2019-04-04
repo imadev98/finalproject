@@ -13,12 +13,17 @@ class Ingrediant extends Migration
      */
     public function up()
     {
-        Schema::create('Role' , function($myTable){
+        			
+         Schema::create('additions__deliveries' , function($myTable){
             $myTable -> increments('id');
-            $myTable-> string('name');
-            $myTable-> string('description');
-            $myTable -> timestamps();
-         });
+            $myTable-> integer('Addition_id')->unsigned();
+            $myTable-> integer('deliveryrequest_id')->unsigned();
+            $myTable-> foreign('deliveryrequest_id')->references('id')->on('reqests__deliveries')->onDelete('cascade');
+            $myTable-> foreign('Addition_id')->references('id')->on('additions')->onDelete('cascade');
+            $myTable -> timestamps(); 
+        });
+
+         
     }
 
     /**

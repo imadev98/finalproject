@@ -10,15 +10,20 @@ use Illuminate\Support\Facades\Schema;
 | and give it the Closure to call when that URI is requested.
 |
 */
-$router->post('/auth/login', 'AuthController@Login');
 
-$router->post('/aut/login', 'AuthController@register');
+$router->post('/register', 'AuthController@register');
+$router->post('/login', 'AuthController@Login');
+$router->post('/AddRole', 'AuthController@AddRole');
+$router->get('/ShowRoles', 'AuthController@ShowRoles');
+$router->get('/ShowRole/{id}', 'AuthController@ShowRole');
+$router->put('/updateRole/{id}', 'AuthController@updateRole');
+$router->get('/ShowUsers', 'AuthController@ShowUsers');
+$router->get('/ShowUser/{id}', 'AuthController@ShowUser');
+$router->put('/updateUser/{id}', 'AuthController@updateUser');
+$router->put('/updateUserRole/{id}', 'AuthController@updateUserRole');
 
 
 
-
-
-$router->post('/at/login', 'AuthController@updateProfile');
 
 $router->group(['middleware' => 'auth'], function ($router) {
 
@@ -27,19 +32,24 @@ $router->group(['middleware' => 'auth'], function ($router) {
    
     
     });
-    
+ /*
+  |--------------------------------------------------------------------------
+  | DeliveryController
+  |--------------------------------------------------------------------------
+  |
+  */
 
-
-$router->get('/', function () use ($router) {
-    $res['success'] = true;
-    $res['result'] = 'Hello world with lumen';
-    return response($res);
-});
-
-
-$router->get('foo', function () {
-    return 'Hello World';
-});
+  $router->post('/demandeDelivery', 'DeliveryController@demandeDelivery');
+  $router->get('/showAll', 'DeliveryController@showAll');
+  $router->get('/ShowOne/{id}', 'DeliveryController@ShowOne');
+  $router->put('/updateDelivery/{id}', 'DeliveryController@updateDelivery');
+  $router->put('/updateAddress/{id}', 'DeliveryController@updateAddress');
+  $router->delete('/annulerDel/{id}', 'DeliveryController@annulerDel');
+  $router->get('/showReqestsDel', 'DeliveryController@showReqestsDel');
+  $router->get('/showReqestDel/{id}', 'DeliveryController@showReqestDel');
+  $router->put('/updateReqestDel/{id}', 'DeliveryController@updateReqestDel');
+  $router->delete('/annulerReqestDel/{id}', 'DeliveryController@annulerReqestDel');
+  
 
 
 

@@ -5,14 +5,14 @@ use App\Table;
 use App\Http\Controllers\Controller;
 use Validator;
 use Response;
-
+use Illuminate\Support\Facades\DB;
 class GestionsController extends Controller {
     /**
      * Register new user
      *
      * @param $request Request
      */ 
-    public $k = 0;
+     //Add_one_table
      public function ajouter(Request $request)
     {
         $this->validate($request, [
@@ -28,26 +28,21 @@ class GestionsController extends Controller {
             'capacity' => $capacity,
             'status' => $status        
         ]);
-        $table=Table::first();
-        //$token=JWTAuth::formUser($user);
-        //return Response::json( compact('token'));
+        
+        
         return 'Table est ajouter  !  ';
     }
+    
+  //show_all_table
     public function showall(){
-        $alltables=Table::all();
-        //for( $i=9 ; $i >= 10; $i++){
-        //$find=$alltables[$i]->id;
-        //return $i;
-        //}
-        //$find = Table::find(9);
-                return $alltables;
+        
+        $alltables=Table::select('id','position','capacity','status')->get();
+        return $alltables;
     }
 
     public function edit($id){
         $table = Table::find($id);
-//echo "$table->capacity"; 
-//echo " $table->emplacment ";
-//echo " $table->status";
+               return $table;
     }
     //update Table
     public function update(Request $request , $id)
@@ -59,7 +54,7 @@ class GestionsController extends Controller {
              'status'
         ]);
         $capacity =$request->input('capacity');
-        $emplacment =$request->input('position');
+        $position =$request->input('position');
         $status =$request->input('status');
         if($capacity!=null ){
         $table->capacity =$capacity;
@@ -74,4 +69,22 @@ class GestionsController extends Controller {
        return 'Table updated !';
       // else return 'nothing changed !';
     }
+    public function delete($name , $id)
+    {
+        $table= DB::table("$name")->find($id);
+        $table->deleted = false;
+        $table->save();
+        return " '$name' Deleted!";
+      
+    }
+    public function restore($name , $id)
+    {
+        $table= DB::table("$name")->find($id);
+        $table->deleted = true;
+        $table->save();
+        return " '$name' restored!";
+      
+    }
+
+
 }

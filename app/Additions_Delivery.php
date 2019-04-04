@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dishe extends Model {
+class Additions_Delivery extends Model {
 
     protected $fillable = [
-        'name','Ingredients','prix','Quantity','Category'
+        'deliveryrequest_id','Addition_id'
     ];
 
     protected $dates = [];

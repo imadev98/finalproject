@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Reqest extends Model {
 
     protected $fillable = [
-        'user_id','reservation_id','dish_id','Additions','Quantity'
+        'user_id','reservation_id','dish_id','Quantity'
     ];
 
     protected $dates = [];
