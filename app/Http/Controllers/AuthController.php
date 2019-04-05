@@ -32,17 +32,15 @@ class AuthController extends Controller
         $this->validate($request, [
            'name'=> 'required',
            'email'=> 'required|email|max:255|unique:users',
-           'deliverer',
            'password' => 'required'
      ]);
      $table = User::create([
         'name' =>  $request->input('name'),
         'email' =>$request->input('email'),
-        'deliverer' =>$request->input('deliverer'),
-         'password' =>Hash::make($request->input('password'))
+        'password' =>Hash::make($request->input('password'))
 
     ]);
-     return 'thanks for register:D !';
+     return 'Thank you for registering in our site! ';
 
      //  return $name;
     }
@@ -170,6 +168,8 @@ public function updateUser(Request $request , $id)
    return 'User updated !';
  
 }
+
+
 //update role user 
 public function updateUserRole(Request $request , $id)
 {
@@ -177,6 +177,7 @@ public function updateUserRole(Request $request , $id)
     $this->validate($request, [
         'name_Role',
     ]);
+
     if($request->input('name_Role')!=null ){
     $name_Role =Role::where('name','=',$request->input('name_Role'))->first();
     $User->role_id =$name_Role->id;
