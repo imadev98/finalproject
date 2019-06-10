@@ -2,10 +2,10 @@
 use Illuminate\Support\Facades\Schema;
 /*
 |--------------------------------------------------------------------------
-| Application Routes
+| routerlication Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register all of the routes for an application.
+| Here is where you can register all of the routes for an routerlication.
 | It is a breeze. Simply tell Lumen the URIs it should respond to
 | and give it the Closure to call when that URI is requested.
 |
@@ -90,3 +90,24 @@ $router->post('/delivery', 'DeliveryController@delivery_now');
 
 
 
+
+/**
+ * Routes for resource LoginController
+ */
+$router->get('Login', 'LoginsController@all');
+$router->get('Login/{id}', 'LoginsController@get');
+$router->post('Login', 'LoginsController@add');
+$router->put('Login/{id}', 'LoginsController@put');
+$router->delete('Login/{id}', 'LoginsController@remove');
+
+
+
+
+/**
+ * Routes for resource GestionFood
+ */
+$router->get('GestionFood', 'GestionFoodsController@all');
+$router->get('GestionFood/{id}', 'GestionFoodsController@get');
+$router->post('GestionFood', 'GestionFoodsController@add');
+$router->put('GestionFood/{id}', 'GestionFoodsController@put');
+$router->delete('GestionFood/{id}', 'GestionFoodsController@remove');
