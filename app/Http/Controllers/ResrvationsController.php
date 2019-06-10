@@ -1,5 +1,5 @@
 <?php namespace App\Http\Controllers;
-
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use App\Additions_Reqest;
 use App\Addition;
@@ -7,6 +7,7 @@ use App\Reservation;
 use App\Table;
 use App\Reqest;
 use App\Dishe;
+use App\User;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -29,7 +30,8 @@ class ResrvationsController extends Controller {
            $arrive_at = $request->input('arrive_at');
            $time = $arrive_at ;
            //hna ychof ida kayna table yhwas aliha ida lgach yglo mkanch 
-            $name= Table::where('position', '=' ,$position )->whereIn('capacity', array($nbpersonne,$nbpersonne+1,$nbpersonne+2))->where('status', '=' , 1 )->orderBy('capacity', 'asc')->first();
+            $name= Table::where('position', '=' ,$position )->whereIn('capacity', array($nbpersone,$nbpersone+1,$nbpersone+2))->where('status', '=' , 1 )->orderBy('capacity', 'asc')->first();
+           
             if($name==null){
                 return "sorry no table";
                 
@@ -39,12 +41,8 @@ class ResrvationsController extends Controller {
                 $k=0;
                 while( $k <=30){ //hna yhwas kol d9i9aa 
                     $timeplus = date('Y-m-d H:i:s',strtotime("+$count minute ",strtotime($time)));
-
-                    
                     $timemins = date('Y-m-d H:i:s',strtotime("-$count minute ",strtotime($time)));
-                    
                     $dateplus = Reservation::where('arrive_at','=',$timeplus)->where('table_id','=',$name->id)->first(); 
-                    
                     $dateminus = Reservation::where('arrive_at','=',$timemins)->where('table_id','=',$name->id)->first();
                  if($dateplus || $dateminus){
                     return "sorry the table taken ";
@@ -54,12 +52,28 @@ class ResrvationsController extends Controller {
              }
 
               $user_id = Auth::user()->id;
+              $user = Auth::user();
+              $count = Auth::user()->count;
+              $user->count=$count+1;
+              $user->save();
+              $test=$user->count;
+              if($test==4){
+                $reduc=$name->price;
+                $reduc=$reduc*0.1;
+                $price_red=$name->price;
+                $price_red=$price_red-$reduc;
+                $user->count=0;
+               $user->save();
+              }else $price_red=$name->price;
               $table = Reservation::create([
                 'user_id' =>$user_id,
                 'table_id' =>$name->id ,
                  'status' =>'confirmed',
-                 'arrive_at'=>$arrive_at
+                 'nb_personne'=>$nbpersone,
+                 'arrive_at'=>$arrive_at,
+                 'price'=>$price_red
             ]);
+            
            return"Great! your table is : '$name' , now please insert your demande "; 
               }
 
@@ -123,6 +137,20 @@ class ResrvationsController extends Controller {
         $res=Reservation::find($id);
                 return $res;
     }
+
+    
+     //filter request reservation ::
+     //sort by date 
+     public function filterReqest(){
+        $res = Reservation::orderBy('created_at', 'desc')->get();
+        return $res;
+    }
+    //sort by date:today 
+    public function filterReqestToday(){
+        $res = Reservation::whereDate('created_at', Carbon::today())->get();
+        return $res;
+    }
+
     //Update Reservation
     public function updateReservation(Request $request,$id){
         
@@ -350,6 +378,8 @@ class ResrvationsController extends Controller {
         $Req=Reqest::find($id);
                 return $Req;
     }
+
+    
  
     //update_request_client
 public function updateReqest(Request $request , $id){
@@ -405,6 +435,7 @@ public function updateReqest(Request $request , $id){
         return 'Reqest Annuler !  ';
     }
      
+
     
 }
 

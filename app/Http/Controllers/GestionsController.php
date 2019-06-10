@@ -72,7 +72,7 @@ class GestionsController extends Controller {
     public function delete($name , $id)
     {
         $table= DB::table("$name")->find($id);
-        $table->deleted = false;
+        $table->deleted = true;
         $table->save();
         return " '$name' Deleted!";
       
@@ -80,7 +80,7 @@ class GestionsController extends Controller {
     public function restore($name , $id)
     {
         $table= DB::table("$name")->find($id);
-        $table->deleted = true;
+        $table->deleted = false;
         $table->save();
         return " '$name' restored!";
       

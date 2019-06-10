@@ -10,17 +10,22 @@ use Illuminate\Support\Facades\Schema;
 | and give it the Closure to call when that URI is requested.
 |
 */
+$router->get('/',function(){
+  return 'hello im here';
+});
 
 $router->post('/register', 'AuthController@register');
-$router->post('/login', 'AuthController@Login');
+$router->post('/login1', 'AuthController@Login');
 $router->post('/AddRole', 'AuthController@AddRole');
 $router->get('/ShowRoles', 'AuthController@ShowRoles');
+
 $router->get('/ShowRole/{id}', 'AuthController@ShowRole');
 $router->put('/updateRole/{id}', 'AuthController@updateRole');
 $router->get('/ShowUsers', 'AuthController@ShowUsers');
 $router->get('/ShowUser/{id}', 'AuthController@ShowUser');
 $router->put('/updateUser/{id}', 'AuthController@updateUser');
 $router->put('/updateUserRole/{id}', 'AuthController@updateUserRole');
+
 
 
 
@@ -55,7 +60,7 @@ $router->group(['middleware' => 'auth'], function ($router) {
 
  
 $router->post('/login', 'LoginController@login');
-$router->post('/register', 'UserController@register');
+
 
 
 
@@ -63,10 +68,11 @@ $router->get('/reservation', 'ResrvationsController@reserver');
 $router->put('/reservation', 'ResrvationsController@reserver');
 $router->delete('/reservation', 'ResrvationsController@annuler');
 
-
+$router->get('/sortdate', 'ResrvationsController@filterReqest');
+$router->get('/sorttoday', 'ResrvationsController@filterReqestToday');
 $router->post('/demande', 'ResrvationsController@demande');
 
-
+$router->post('/reduction', 'PaymentControllersController@reductions');
 
 
 
@@ -75,7 +81,6 @@ $router->get('/gestion', 'GestionsController@showall');
 $router->put('/gestion/{id}', 'GestionsController@update');
 $router->get('/gestion/{id}', 'GestionsController@edit');
 $router->delete('/gestion', 'GestionsController@ajouter');
-$router->get('/user/{id}', ['middleware' => 'auth', 'uses' =>  'UserController@get_user']);
 
 $router->post('/test', 'TestController@addmesimpay'); 
 
