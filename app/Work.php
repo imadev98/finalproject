@@ -2,12 +2,11 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Reservation extends Model {
+class Work extends Model {
 
-    protected $fillable =[
-    'table_id' , 'user_id' , 'status','arrive_at','nb_personne'
+    protected $fillable = [
 
-
+        'day','open_in','close_in','exception'
     ];
 
     protected $dates = [];

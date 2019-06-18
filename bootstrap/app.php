@@ -66,10 +66,13 @@ $app->singleton(
 
  $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    
 ]);
 
+  
+
 $app->middleware([
-    \Illuminate\Session\Middleware\StartSession::class,
+    App\Http\Middleware\CorsMiddleware::class
 ]);
 
 $app->singleton(Illuminate\Session\SessionManager::class, function () use ($app) {

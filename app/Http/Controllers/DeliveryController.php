@@ -20,7 +20,7 @@ class DeliveryController extends Controller {
      *
      * @param $request Request
      */ public function delivery(Request $request){  
-
+        
             }
 
 
@@ -38,9 +38,9 @@ class DeliveryController extends Controller {
                }elseif($Vehicle==null){
                 return "sorry no vehicle available Now ! " ;
                }else{
-                 //$user_id = Auth::user()->id;
+                 $user_id = Auth::user()->id;
                  $table = Delivery::create([
-                   'user_id' =>2,
+                   'user_id' =>$user_id,
                    'vehicle_id'=>$Vehicle->id,
                    'deliverer_id'=>$Delivery->id,
                     'status' =>'on way',

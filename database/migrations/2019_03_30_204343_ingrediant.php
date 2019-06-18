@@ -14,10 +14,9 @@ class Ingrediant extends Migration
     public function up()
     {
         			
-         Schema::create('reductions' , function($myTable){
+         Schema::create('mails' , function($myTable){
             $myTable -> increments('id');
-            $myTable-> integer('date');
-            $myTable-> integer('values');
+            $myTable-> string('message');
             $myTable -> timestamps(); 
         });
 

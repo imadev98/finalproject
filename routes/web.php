@@ -14,30 +14,41 @@ $router->get('/',function(){
   return 'hello im here';
 });
 
+/*
+|--------------------------------------------------------------------------
+| AuthController Routes
+|--------------------------------------------------------------------------
+|
+*/
+
+
 $router->post('/register', 'AuthController@register');
-$router->post('/login1', 'AuthController@Login');
-$router->post('/AddRole', 'AuthController@AddRole');
-$router->get('/ShowRoles', 'AuthController@ShowRoles');
+$router->post('/login', 'AuthController@Login');
 
-$router->get('/ShowRole/{id}', 'AuthController@ShowRole');
-$router->put('/updateRole/{id}', 'AuthController@updateRole');
-$router->get('/ShowUsers', 'AuthController@ShowUsers');
-$router->get('/ShowUser/{id}', 'AuthController@ShowUser');
-$router->put('/updateUser/{id}', 'AuthController@updateUser');
-$router->put('/updateUserRole/{id}', 'AuthController@updateUserRole');
+$router->post('/reservation', 'ResrvationsController@reserver');
 
 
 
-
+$router->post('/contact', 'GestionsController@Contact');
 
 $router->group(['middleware' => 'auth'], function ($router) {
 
-     $router->get('/test5', 'AuthController@test');
-     $router->post('/reservation', 'ResrvationsController@reserver');
-   
-    
-    });
- /*
+
+  /*
+|--------------------------------------------------------------------------
+| AuthController Routes
+|--------------------------------------------------------------------------
+|
+*/
+  $router->post('/AddRole', 'AuthController@AddRole');
+  $router->get('/ShowRoles', 'AuthController@ShowRoles');
+   $router->get('/ShowRole/{id}', 'AuthController@ShowRole');
+   $router->put('/updateRole/{id}', 'AuthController@updateRole');
+   $router->get('/ShowUsers', 'AuthController@ShowUsers');
+   $router->get('/ShowUser/{id}', 'AuthController@ShowUser');
+    $router->put('/updateUser/{id}', 'AuthController@updateUser');
+    $router->put('/updateUserRole/{id}', 'AuthController@updateUserRole');
+/*
   |--------------------------------------------------------------------------
   | DeliveryController
   |--------------------------------------------------------------------------
@@ -54,60 +65,117 @@ $router->group(['middleware' => 'auth'], function ($router) {
   $router->get('/showReqestDel/{id}', 'DeliveryController@showReqestDel');
   $router->put('/updateReqestDel/{id}', 'DeliveryController@updateReqestDel');
   $router->delete('/annulerReqestDel/{id}', 'DeliveryController@annulerReqestDel');
+
+/*
+  |--------------------------------------------------------------------------
+  | GestionsController
+  |--------------------------------------------------------------------------
+  |
+  */
+
+  
+$router->post('/addtime', 'GestionsController@add_time');
+$router->get('/showallWork', 'GestionsController@showall_Work');
+$router->put('/updatetime/{id}', 'GestionsController@update_time');
+$router->post('/addexception/{id}', 'GestionsController@add_exception');
+
+/**
+ * Routes for resource Tables
+ */
+$router->post('/gestion', 'GestionsController@ajouter');
+$router->get('/gestion', 'GestionsController@showall');
+$router->put('/gestion/{id}', 'GestionsController@update');
+$router->get('/gestion/{id}', 'GestionsController@show');
+$router->delete('/gestion', 'GestionsController@delete');
+$router->put('/restore/{id}', 'GestionsController@restore');
+/*
+  |--------------------------------------------------------------------------
+  | ReservationController
+  |--------------------------------------------------------------------------
+  |
+  */
+
+  
+  $router->delete('/reservation/{id}', 'ResrvationsController@annuler');
+  $router->get('/showAllres', 'ResrvationsController@showAll');
+  $router->get('/Showreservation/{id}', 'ResrvationsController@ShowOne');
+  $router->get('/sortdate', 'ResrvationsController@filterReqest');
+  $router->get('/sorttoday', 'ResrvationsController@filterReqestToday');
+  $router->post('/demande', 'ResrvationsController@demande');
+  $router->put('/updateReservation/{id}', 'ResrvationsController@updateReservation');
+
+
+
+
+
+
+/*
+  |--------------------------------------------------------------------------
+  | GestionFoodController
+  |--------------------------------------------------------------------------
+  |
+  */
+/**
+ * Routes for resource dishes
+ */
+$router->get('ShowDishes', 'GestionFoodsController@ShowDishes');
+$router->get('ShowDishes/{id}', 'GestionFoodsController@ShowDishe');
+$router->post('AddDishe', 'GestionFoodsController@AddDishe');
+$router->put('updatedish/{id}', 'GestionFoodsController@update');
+$router->delete('GestionFood/{id}', 'GestionFoodsController@remove');
+/**
+ * Routes for resource Addition
+ **/
+$router->get('ShowAdditions', 'GestionFoodsController@ShowAdditions');
+$router->get('ShowAdditions/{id}', 'GestionFoodsController@ShowAddition');
+$router->post('AddAddition', 'GestionFoodsController@AddAddition');
+$router->put('updateAddition/{id}', 'GestionFoodsController@updateAddition');
+$router->delete('GestionFood/{id}', 'GestionFoodsController@remove');
+/**
+ * Routes for resource Vehicle
+ */
+$router->get('ShowVehicles', 'GestionFoodsController@ShowVehicles');
+$router->get('ShowVehicles/{id}', 'GestionFoodsController@ShowVehicle');
+$router->post('AddVehicle', 'GestionFoodsController@AddVehicle');
+$router->put('updateVehicle/{id}', 'GestionFoodsController@updateVehicle');
+$router->delete('GestionFood/{id}', 'GestionFoodsController@remove');
+   
+  /**
+  * Routes for resource Payment
+  */
+
+$router->post('/reduction', 'PaymentControllersController@reductions');
+    });
+ 
   
 
 
 
  
-$router->post('/login', 'LoginController@login');
 
 
 
 
-$router->get('/reservation', 'ResrvationsController@reserver');
-$router->put('/reservation', 'ResrvationsController@reserver');
-$router->delete('/reservation', 'ResrvationsController@annuler');
-
-$router->get('/sortdate', 'ResrvationsController@filterReqest');
-$router->get('/sorttoday', 'ResrvationsController@filterReqestToday');
-$router->post('/demande', 'ResrvationsController@demande');
-
-$router->post('/reduction', 'PaymentControllersController@reductions');
-
-
-
-$router->post('/gestion', 'GestionsController@ajouter');
-$router->get('/gestion', 'GestionsController@showall');
-$router->put('/gestion/{id}', 'GestionsController@update');
-$router->get('/gestion/{id}', 'GestionsController@edit');
-$router->delete('/gestion', 'GestionsController@ajouter');
-
-$router->post('/test', 'TestController@addmesimpay'); 
-
-
-
-$router->post('/delivery', 'DeliveryController@delivery_now');
 
 
 
 
-/**
- * Routes for resource LoginController
- */
-$router->get('Login', 'LoginsController@all');
-$router->get('Login/{id}', 'LoginsController@get');
-$router->post('Login', 'LoginsController@add');
-$router->put('Login/{id}', 'LoginsController@put');
-$router->delete('Login/{id}', 'LoginsController@remove');
 
 
 
 
-/**
- * Routes for resource GestionFood
- */
-$router->get('GestionFood', 'GestionFoodsController@all');
-$router->get('GestionFood/{id}', 'GestionFoodsController@get');
-$router->post('GestionFood', 'GestionFoodsController@add');
-$router->put('GestionFood/{id}', 'GestionFoodsController@put');
-$router->delete('GestionFood/{id}', 'GestionFoodsController@remove');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

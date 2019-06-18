@@ -40,7 +40,9 @@ class AuthController extends Controller
         'password' =>Hash::make($request->input('password'))
 
     ]);
-     return 'Thank you for registering in our site! ';
+    $table->save();
+    $name=$table->name;
+     return "Thank you for registering in our site!'$name' ";
 
      //  return $name;
     }
