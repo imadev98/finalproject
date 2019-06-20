@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Schema;
 $router->get('/',function(){
   return 'hello im here';
 });
+$router->get('/showAllres', 'ResrvationsController@showAll');
+$router->get('/showReqests/{id}', 'ResrvationsController@showReqests');
 
 /*
 |--------------------------------------------------------------------------
@@ -25,15 +27,16 @@ $router->get('/',function(){
 $router->post('/register', 'AuthController@register');
 $router->post('/login', 'AuthController@Login');
 
-$router->post('/reservation', 'ResrvationsController@reserver');
 
+$router->post('/showAvilable', 'ResrvationsController@showAvilable');
 
 
 $router->post('/contact', 'GestionsController@Contact');
+$router->get('ShowDishes', 'GestionFoodController@ShowDishes');
 
 $router->group(['middleware' => 'auth'], function ($router) {
 
-
+  $router->post('/reservation/{id}', 'ResrvationsController@reserver');
   /*
 |--------------------------------------------------------------------------
 | AuthController Routes
@@ -97,7 +100,7 @@ $router->put('/restore/{id}', 'GestionsController@restore');
 
   
   $router->delete('/reservation/{id}', 'ResrvationsController@annuler');
-  $router->get('/showAllres', 'ResrvationsController@showAll');
+  
   $router->get('/Showreservation/{id}', 'ResrvationsController@ShowOne');
   $router->get('/sortdate', 'ResrvationsController@filterReqest');
   $router->get('/sorttoday', 'ResrvationsController@filterReqestToday');
@@ -118,7 +121,7 @@ $router->put('/restore/{id}', 'GestionsController@restore');
 /**
  * Routes for resource dishes
  */
-$router->get('ShowDishes', 'GestionFoodsController@ShowDishes');
+
 $router->get('ShowDishes/{id}', 'GestionFoodsController@ShowDishe');
 $router->post('AddDishe', 'GestionFoodsController@AddDishe');
 $router->put('updatedish/{id}', 'GestionFoodsController@update');

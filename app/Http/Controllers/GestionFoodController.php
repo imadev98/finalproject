@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 use Validator;
 use Response;
 
-class DeliveryController extends Controller {
+class GestionFoodController extends Controller {
     /**
      * Register new user
      *
@@ -36,7 +36,7 @@ class DeliveryController extends Controller {
     }
     
      public function ShowDishes(){  
-        $allDishes=Dishe::select('name','Ingredients','prix','Quantity','Category')->get();
+        $allDishes=Dishe::select('id','name','Ingredients','Quantity','Category')->get();
         return $allDishes;
             }
 
