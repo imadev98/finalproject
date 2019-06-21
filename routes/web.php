@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Schema;
 $router->get('/',function(){
   return 'hello im here';
 });
-$router->get('/showAllres', 'ResrvationsController@showAll');
 $router->get('/showReqests/{id}', 'ResrvationsController@showReqests');
 
 /*
@@ -32,17 +31,20 @@ $router->post('/showAvilable', 'ResrvationsController@showAvilable');
 
 
 $router->post('/contact', 'GestionsController@Contact');
-$router->get('ShowDishes', 'GestionFoodController@ShowDishes');
+
 
 $router->group(['middleware' => 'auth'], function ($router) {
 
-  $router->post('/reservation/{id}', 'ResrvationsController@reserver');
+  $router->post('/reservation', 'ResrvationsController@reserver');
   /*
 |--------------------------------------------------------------------------
 | AuthController Routes
 |--------------------------------------------------------------------------
 |
 */
+$router->get('/showAllres', 'ResrvationsController@showAll');
+
+$router->get('ShowDishes', 'GestionFoodController@ShowDishes');
   $router->post('/AddRole', 'AuthController@AddRole');
   $router->get('/ShowRoles', 'AuthController@ShowRoles');
    $router->get('/ShowRole/{id}', 'AuthController@ShowRole');
@@ -80,7 +82,7 @@ $router->group(['middleware' => 'auth'], function ($router) {
 $router->post('/addtime', 'GestionsController@add_time');
 $router->get('/showallWork', 'GestionsController@showall_Work');
 $router->put('/updatetime/{id}', 'GestionsController@update_time');
-$router->post('/addexception/{id}', 'GestionsController@add_exception');
+$router->post('/addexception', 'GestionsController@add_exception');
 
 /**
  * Routes for resource Tables
@@ -89,7 +91,7 @@ $router->post('/gestion', 'GestionsController@ajouter');
 $router->get('/gestion', 'GestionsController@showall');
 $router->put('/gestion/{id}', 'GestionsController@update');
 $router->get('/gestion/{id}', 'GestionsController@show');
-$router->delete('/gestion', 'GestionsController@delete');
+$router->delete('/gestion/{id}', 'GestionsController@delete');
 $router->put('/restore/{id}', 'GestionsController@restore');
 /*
   |--------------------------------------------------------------------------

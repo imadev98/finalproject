@@ -10,9 +10,12 @@ class CorsMiddleware
           // 'Access-Control-Max-Age'           => '86400',
             'Access-Control-Allow-Origin'      => '*',
             'Access-Control-Allow-Methods'     => 'POST, GET, OPTIONS',
-            'Access-Control-Allow-Headers'     => 'Content-Type, token'// X-Requested-With'
+            'Access-Control-Allow-Headers'     => 'Content-Type, token',// X-Requested-With'
+            'Access-Control-Allow-Headers'  => 'Authorization'
+
         ];
         if ($request->isMethod('OPTIONS'))
+  
         {
                   $response = response("",201);
         }else{

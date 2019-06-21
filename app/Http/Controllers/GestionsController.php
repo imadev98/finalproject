@@ -21,26 +21,27 @@ class GestionsController extends Controller {
         $this->validate($request, [
             'position'=> 'required',
             'capacity'=> 'required',
-            'status'=>'required'   
+            'price' => 'required'
+            
         ]);
         $position = $request->input('position');
         $capacity =$request->input('capacity');
-        $status = $request->input('status');
+        $price =$request->input('price');
         $table = Table::create([
             'position' => $position,
             'capacity' => $capacity,
-            'status' => $status        
+                'price' => $price  
         ]);
         
         
-        return 'Table est ajouter  !  ';
+        return response()->json('Table est ajouter  !');
     }
     
   //show_all_table
     public function showall(){
         
-        $alltables=Table::select('id','position','capacity','status')->get();
-        return $alltables;
+        $alltables=Table::select('id','position','capacity')->get();
+        return response()->json($alltables);
     }
 
     public function show($id){
@@ -54,40 +55,33 @@ class GestionsController extends Controller {
         $this->validate($request, [
              'capacity' ,
              'position',
-             'status'
+             'price'
+            
         ]);
         $capacity =$request->input('capacity');
         $position =$request->input('position');
-        $status =$request->input('status');
+        $price =$request->input('price');
         if($capacity!=null ){
         $table->capacity =$capacity;
        }
        if($position!=null){
           $table->position =$position;
        }
-       if($status!=null){
-        $table->status =$status;
-       }
+       if($price!=null){
+        $table->price =$price;
+     }
+       
        $table->save();
        return 'Table updated !';
       // else return 'nothing changed !';
     }
-    public function delete($name , $id)
+    public function delete( $id)
     {
-        $table= DB::table("$name")->find($id);
-        $table->deleted = true;
-        $table->save();
-        return " '$name' Deleted!";
-      
+        $table= Table::where('id',$id)->delete();
+        return response()->json(" table Deleted!");
     }
-    public function restore($name , $id)
-    {
-        $table= DB::table("$name")->find($id);
-        $table->deleted = false;
-        $table->save();
-        return " '$name' restored!";
-      
-    }
+
+    
 
 
     public function add_time(Request $request)
@@ -106,8 +100,8 @@ class GestionsController extends Controller {
             'close_in' => $close_in        
         ]);
         
-        
-        return 'Time Added !  ';
+    
+        return response()->json('Time Added !  ');
     }
 
     public function update_time(Request $request , $id)
@@ -120,6 +114,7 @@ class GestionsController extends Controller {
         ]);
         
         $open_in =$request->input('open_in');
+        
         $close_in =$request->input('close_in');
         
         if($open_in!=null ){
@@ -133,22 +128,27 @@ class GestionsController extends Controller {
      
 
        $time->save();
-       return 'time updated !';
+       return response()->json('time updated !');
       
     }
 
-    public function add_exception(Request $request , $id)
+    public function add_exception(Request $request )
     {
-        $time= Work::find($id);
+        
         $this->validate($request, [
+            'day',
             'exception'
         ]);
+        
         $exception =$request->input('exception');
+        $day =$request->input('day');
+
+        $time= Work::where('day','=',$day)->first();
         if($exception!=null ){
         $time->exception =$exception;
         }
        $time->save();
-       return 'Expception Added !';
+       return response()->json('Expception Added !');
       
     }
 

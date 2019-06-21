@@ -30,12 +30,24 @@ class ResrvationsController extends Controller {
          $col = collect();
            $nbpersone  = $request->input('nbpersone');
            $arrive_at = $request->input('arrive_at');
+
+
            $time = $arrive_at ;
+           $comeAt = new Carbon($time);
+           $comeAt->subHour(2);
+ 
+  
+           
+           if(Carbon::now()>= $comeAt){
+  return response()->json("You can make reserve after  2 hours from now  ! ");
+           }
+
+
            $after = new Carbon($time);
            $after->addHour(3);
           $befor = new Carbon($time);
           $befor->subHour(3);
-          $users1 = DB::table('tables')->where('capacity','=',$nbpersone)->select('id')->get();
+          $users1 = DB::table('tables')->where('capacity','=',$nbpersone)->get();
    foreach($users1 as $user){
     $users = DB::table('tables')
     ->where('tables.id','=',$user->id)
@@ -47,7 +59,7 @@ class ResrvationsController extends Controller {
     ->get();
     if($users->isEmpty()){
       $col->push($user);
-      echo "$users";
+     
     }
    }
    return $col;
@@ -110,10 +122,10 @@ class ResrvationsController extends Controller {
             // return $name;
 
         }
-        public function reserver(Request $request,$id){
+        public function reserver(Request $request){
 
             
-            $table_res=Table::find($id);
+            $table_res=Table::find($request->input('id'));
 
               $user_id = Auth::user()->id;
               $user = Auth::user();
@@ -132,7 +144,7 @@ class ResrvationsController extends Controller {
               }else $price_red=$table_res->price;
               $table = Reservation::create([
                 'user_id' =>$user_id,
-                'table_id' =>$id ,
+                'table_id' =>$request->input('id') ,
                  'status' =>'confirmed',
                  'nb_personne'=> $table_res->capacity,
                  'arrive_at'=>$arrive_at,
@@ -154,38 +166,26 @@ class ResrvationsController extends Controller {
         $reservation_id = Reservation::orderBy('created_at', 'desc')->first();
         $this->validate($request, [
            'name_dish'=> 'required',
-            'Additions' => 'required',
             'Quantity' => 'required'
      ]);
 
 
      $name_dish = Dishe::where('name', '=',$request->input('name_dish'))->first();
-     $QteDispo=$name_dish->Quantity;
-     $Additions = Addition::where('name', '=', $request->input('Additions'))->first();
-     $Quantity = $request->input('Quantity');
-     if($QteDispo==0 || $QteDispo < $Quantity){
-         return "sorry Qte Dispo is '$QteDispo' ";
-     }else{
+   
+    
      $table = Reqest::create([
         'user_id' => $reservation_id->user_id,
         'dish_id' =>$name_dish->id,
-         'Quantity'=>$Quantity,
+        'Quantity' => $request->input('Quantity'),
          'reservation_id' => $reservation_id->id
     ]);
 
-    $name_dish->Quantity=$QteDispo-$Quantity;
-    $name_dish->save();
-
-    $reqest_id = Reqest::orderBy('created_at', 'desc')->first();
-
-    $table = Additions_Reqest::create([
-        'Addition_id' => $Additions->id,
-        'reqest _id' =>$reqest_id->id,
-    ]);
-     return 'thanks for order :D !';
+    
+    
+     return response()->json('Everything is set up , thanks  !');
     }
 
-    }
+    
 /*
  *----------------------------------------------------------------------------------------------
  *----------------------------------------------------------------------------------------------
@@ -438,13 +438,13 @@ public function showReqests($id){
         $time = date('Y-m-d',strtotime($time));
 
 if($timeplus==$time){
-    return 'you can not Canel ur resrvation';
+    return response()->json('you can not Canel ur resrvation');
 }else{
 
 
-        $res12->status='annuler';
+        $res12->status='Canceled';
         $res12->save();
-        return 'Reservation Annuler !  ';
+        return response()->json('Reservation Canceled !');
     }
 }
 /*
