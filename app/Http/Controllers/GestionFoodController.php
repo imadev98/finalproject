@@ -37,7 +37,7 @@ class GestionFoodController extends Controller {
     
      public function ShowDishes(){  
         $allDishes=Dishe::select('id','name','Ingredients','Quantity','Category')->get();
-        return $allDishes;
+        return response()->json($allDishes);
             }
 
             public function ShowDishe($id){  
