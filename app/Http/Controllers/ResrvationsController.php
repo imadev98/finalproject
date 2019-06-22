@@ -8,6 +8,7 @@ use App\Table;
 use App\Reqest;
 use App\Dishe;
 use App\User;
+use App\Work;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -32,12 +33,19 @@ class ResrvationsController extends Controller {
            $arrive_at = $request->input('arrive_at');
 
 
-           $time = $arrive_at ;
+           $time = $arrive_at;
            $comeAt = new Carbon($time);
            $comeAt->subHour(2);
- 
-  
+           $timeplus = date('H:i:s',strtotime($time));
            
+        $no_time = Work::where('day','=',1)->first();
+           $open_in=$no_time->open_in;
+           $close_in=$no_time->close_in;
+           
+ 
+           if( $close_in<$timeplus ||  $open_in> $timeplus){
+               return response()->json("sorry We are close in this time $time , see working time to get more information");
+           }
            if(Carbon::now()>= $comeAt){
   return response()->json("You can make reserve after  2 hours from now  ! ");
            }
