@@ -14,6 +14,8 @@ $router->get('/',function(){
   return 'hello im here';
 });
 $router->get('/showReqests/{id}', 'ResrvationsController@showReqests');
+$router->get('/Count', 'ResrvationsController@Count');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,30 +23,35 @@ $router->get('/showReqests/{id}', 'ResrvationsController@showReqests');
 |--------------------------------------------------------------------------
 |
 */
-
+$router->post('/demande', 'ResrvationsController@demande');
 
 $router->post('/register', 'AuthController@register');
 $router->post('/login', 'AuthController@Login');
 
 
 $router->post('/showAvilable', 'ResrvationsController@showAvilable');
-
+$router->get('/ShowDishes', 'GestionFoodController@ShowDishes');
+$router->get('/showAllres', 'ResrvationsController@showAll');
+$router->get('/showConfRes', 'ResrvationsController@showConfirmed');
+$router->get('/showCancRes', 'ResrvationsController@showCanceled');
 
 $router->post('/contact', 'GestionsController@Contact');
 
 
 $router->group(['middleware' => 'auth'], function ($router) {
-
-  $router->post('/reservation', 'ResrvationsController@reserver');
+  $router->get('/Countclient', 'ResrvationsController@Count_client');
+ 
+  $router->get('/showConfClient', 'ResrvationsController@showConfClient');
+$router->get('/showCanClient', 'ResrvationsController@showCanClient');
   /*
 |--------------------------------------------------------------------------
 | AuthController Routes
 |--------------------------------------------------------------------------
 |
 */
-$router->get('/showAllres', 'ResrvationsController@showAll');
 
-$router->get('ShowDishes', 'GestionFoodController@ShowDishes');
+ $router->post('/reservation', 'ResrvationsController@reserver');
+
   $router->post('/AddRole', 'AuthController@AddRole');
   $router->get('/ShowRoles', 'AuthController@ShowRoles');
    $router->get('/ShowRole/{id}', 'AuthController@ShowRole');
@@ -92,6 +99,7 @@ $router->get('/gestion', 'GestionsController@showall');
 $router->put('/gestion/{id}', 'GestionsController@update');
 $router->get('/gestion/{id}', 'GestionsController@show');
 $router->delete('/gestion/{id}', 'GestionsController@delete');
+
 $router->put('/restore/{id}', 'GestionsController@restore');
 /*
   |--------------------------------------------------------------------------
@@ -106,7 +114,7 @@ $router->put('/restore/{id}', 'GestionsController@restore');
   $router->get('/Showreservation/{id}', 'ResrvationsController@ShowOne');
   $router->get('/sortdate', 'ResrvationsController@filterReqest');
   $router->get('/sorttoday', 'ResrvationsController@filterReqestToday');
-  $router->post('/demande', 'ResrvationsController@demande');
+  
   $router->put('/updateReservation/{id}', 'ResrvationsController@updateReservation');
 
 
@@ -127,7 +135,10 @@ $router->put('/restore/{id}', 'GestionsController@restore');
 $router->get('ShowDishes/{id}', 'GestionFoodsController@ShowDishe');
 $router->post('AddDishe', 'GestionFoodsController@AddDishe');
 $router->put('updatedish/{id}', 'GestionFoodsController@update');
-$router->delete('GestionFood/{id}', 'GestionFoodsController@remove');
+
+$router->delete('/deletedish/{id}', 'GestionFoodController@deletedish');
+
+
 /**
  * Routes for resource Addition
  **/

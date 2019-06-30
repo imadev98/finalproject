@@ -30,18 +30,23 @@ class AuthController extends Controller
     {
 
         $this->validate($request, [
-           'name'=> 'required',
+
+           'FirstName'=> 'required',
+           'LastName'=> 'required',
+           'phone'=>'required',
            'email'=> 'required|email|max:255|unique:users',
            'password' => 'required'
      ]);
      $table = User::create([
-        'name' =>  $request->input('name'),
+        'FirstName' =>  $request->input('FirstName'),
+        'LastName' =>  $request->input('LastName'),
+        'phone' =>$request->input('phone'),
         'email' =>$request->input('email'),
         'password' =>Hash::make($request->input('password'))
 
     ]);
     $table->save();
-    $name=$table->name;
+    $name=$table->FirstName;
      return "Thank you for registering in our site!'$name' ";
 
      //  return $name;
@@ -53,11 +58,13 @@ class AuthController extends Controller
             'email'    => 'required|email|max:255',
             'password' => 'required',
         ]);
+  
 
         try {
 
             if (!$token = $this->jwt->attempt($request->only('email', 'password'))) {
                 return response()->json(['user_not_found'], 404);
+                
             }
 
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
@@ -73,7 +80,16 @@ class AuthController extends Controller
             return response()->json(['token_absent' => $e->getMessage()], 500);
 
         }
-    
+       $user = Auth::user()->id;
+       
+       $col = collect();
+       $col->push($user);
+       $col->push(compact('token'));
+
+       $token= compact('token')['token'];
+       
+    //    return $col;
+
         return response()->json(compact('token'));
     }
 

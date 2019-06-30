@@ -16,7 +16,8 @@ class Ingrediant extends Migration
         			
          Schema::create('mails' , function($myTable){
             $myTable -> increments('id');
-            $myTable-> string('message');
+            $myTable-> string('message_admin');
+            $myTable-> string('message_client');
             $myTable -> timestamps(); 
         });
 

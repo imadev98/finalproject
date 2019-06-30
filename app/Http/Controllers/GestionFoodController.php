@@ -36,7 +36,7 @@ class GestionFoodController extends Controller {
     }
     
      public function ShowDishes(){  
-        $allDishes=Dishe::select('id','name','Ingredients','Quantity','Category')->get();
+        $allDishes=Dishe::all();
         return response()->json($allDishes);
             }
 
@@ -79,7 +79,11 @@ class GestionFoodController extends Controller {
        return 'Dishe updated !';
       // else return 'nothing changed !';
     }
-
+    public function deletedish( $id)
+    {
+        $Dishe= Dishe::where('id',$id)->delete();
+        return response()->json(" Dishe Deleted!");
+    }
 
     /*
     *  All Operation in Addtition
@@ -130,6 +134,9 @@ public function updateAddition(Request $request , $id)
        return 'Addition updated !';
       // else return 'nothing changed !';
     }
+
+     
+
 
 
     /*

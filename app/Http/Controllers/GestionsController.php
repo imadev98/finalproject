@@ -178,4 +178,6 @@ class GestionsController extends Controller {
         
         return 'thanks for ur message !  ';
     }
+    
+
 }

@@ -2,10 +2,11 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dishe extends Model {
+class Mail extends Model {
 
     protected $fillable = [
-        'name','Ingredients','price','Quantity','Category'
+        'message_admin','message_client'
+
     ];
 
     protected $dates = [];

@@ -9,6 +9,8 @@ use App\Reqest;
 use App\Dishe;
 use App\User;
 use App\Work;
+use App\Mail;
+use App\Delivery;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -35,7 +37,9 @@ class ResrvationsController extends Controller {
 
            $time = $arrive_at;
            $comeAt = new Carbon($time);
+           $comeAtplus =  Carbon::now();
            $comeAt->subHour(2);
+           $comeAtplus->addHour(3);
            $timeplus = date('H:i:s',strtotime($time));
           $day = Carbon::now()->dayOfWeek;
           
@@ -45,10 +49,11 @@ class ResrvationsController extends Controller {
            
  
         //    if( $close_in<$timeplus ||  $open_in> $timeplus){
-        //        return response()->json("sorry We are close in this time $time , see working time to get more information");
+        //        return response()->json(
+          //  "sorry We are close in this time $time , see working time to get more information");
         //    }
            if(Carbon::now()>= $comeAt){
-  return response()->json("You can make reserve after  2 hours from now  ! ");
+  return response()->json(['id'=>"1",'msg'=>"You can Reserv only from $comeAtplus"]);
            }
 
 
@@ -71,7 +76,7 @@ class ResrvationsController extends Controller {
      
     }
    }
-   return $col;
+   return response()->json($col);
 
 
 
@@ -136,31 +141,36 @@ class ResrvationsController extends Controller {
             
             $table_res=Table::find($request->input('id'));
 
-              $user_id = Auth::user()->id;
+             $user_id = Auth::user()->id;
               $user = Auth::user();
               $count = Auth::user()->count;
               $user->count=$count+1;
               $user->save();
               $test=$user->count;
               $arrive_at = $request->input('arrive_at');
-              if($test==4){
+             /* if($test==4){
                 $reduc=$table_res->price;
                 $reduc=$reduc*0.1;
                 $price_red=$table_res->price;
                 $price_red=$price_red-$reduc;
                 $user->count=0;
                $user->save();
-              }else $price_red=$table_res->price;
+              }else $price_red=$table_res->price;*/
+              $table_id = $request->input('id');
               $table = Reservation::create([
-                'user_id' =>$user_id,
-                'table_id' =>$request->input('id') ,
+                'user_id'=>$user_id,
+                'table_id' =>$table_id ,
                  'status' =>'confirmed',
                  'nb_personne'=> $table_res->capacity,
                  'arrive_at'=>$arrive_at,
-                 'price'=>$price_red
+                 'price'=>5000
+            ]);
+            $mail = Mail::create([
+                'message_admin' => "$user->FirstName Reserv Table:$table_id at: $arrive_at . ",
+                'message_client' => "Thank you for your reservation ."
             ]);
 
-           return "Great! now please insert your demande ";
+           return response()->json("Great! now please insert your demande ");
 
 
               }
@@ -174,12 +184,12 @@ class ResrvationsController extends Controller {
         public function demande(Request $request){
         $reservation_id = Reservation::orderBy('created_at', 'desc')->first();
         $this->validate($request, [
-           'name_dish'=> 'required',
+           'id'=> 'required',
             'Quantity' => 'required'
      ]);
 
 
-     $name_dish = Dishe::where('name', '=',$request->input('name_dish'))->first();
+     $name_dish = Dishe::where('id', '=',$request->input('id'))->first();
    
     
      $table = Reqest::create([
@@ -206,10 +216,43 @@ class ResrvationsController extends Controller {
         $allres=Reservation::all();
                 return response()->json($allres);            
     }
+    //show_all_reservation_confirmed
+    public function showConfirmed(){
+        $allres=Reservation::where('status','=','confirmed')->get();
+                return response()->json($allres);            
+    }
+    //show_all_reservation_annuled
+    public function showCanceled(){
+        $allres=Reservation::where('status','=','Canceled')->get();
+                return response()->json($allres);            
+    }
+
+
+
+     //show_all_reservation_confirmed_for client
+     public function showConfClient(){
+         $id= Auth::user()->id;
+        $allres=Reservation::where('user_id','=',$id)->where('status','=','confirmed')->get();
+                return response()->json($allres);            
+    }
+     //show_all_reservation_annuled client
+     public function showCanClient(){
+        $id= Auth::user()->id;
+        $allres=Reservation::where('user_id','=',$id)->where('status','=','Canceled')->get();
+                return response()->json($allres);            
+    }
+
+
+
 //show_all_request_for_reservation
 public function showReqests($id){
+    $col = collect();
     $allReq=Reqest::where('reservation_id','=',$id)->get();
-            return response()->json($allReq); 
+    foreach($allReq as $req){
+       $dish=Dishe::where('id','=',$req->dish_id)->first();
+          $col->push($dish);
+        }
+            return response()->json($col); 
 }
 
     //show_one_reservation
@@ -528,6 +571,40 @@ public function updateReqest(Request $request , $id){
         $Reqest->save();
         return 'Reqest Annuler !  ';
     }
+
+    public function Count(){
+
+        $res = Reservation::all()->count();
+        $users = User::all()->count();
+        $delv = Delivery::all()->count();
+        $total = Reqest::sum('Quantity');
+//------------------------------------------------------------------
+
+        $time=Carbon::today();
+        $time = date('Y-m-d',strtotime($time));
+        $res_today = Reservation::whereDate('created_at','=',$time)->count();
+        $users_today = User::whereDate('created_at','=',$time)->count();
+        $delv_today = Delivery::whereDate('created_at','=',$time)->count();
+        $total_today = Reqest::whereDate('created_at','=',$time)->sum('Quantity');
+//------------------------------------------------------------------
+       return response()->json(['allres'=>$res,'allusers'=>$users,'allorder'=>$delv,'allreqest'=>$total,'todayres'=>$res_today,'todayusers'=>$users_today,'todayorder'=>$delv_today,'todayreqest'=>$total_today]);
+
+    }
+    public function Count_client(){
+        $id = Auth::user()->id;
+        $res = Reservation::where('user_id','=',$id)->count();
+       $delv = Delivery::where('user_id','=',$id)->count();
+         $total = Reqest::where('user_id','=',$id)->sum('Quantity');
+//------------------------------------------------------------------
+         $time=Carbon::today();
+         $time = date('Y-m-d',strtotime($time));
+         $res_today = Reservation::where('user_id','=',$id)->whereDate('created_at','=',$time)->count();
+         $delv_today = Delivery::where('user_id','=',$id)->whereDate('created_at','=',$time)->count();
+        $total_today = Reqest::where('user_id','=',$id)->whereDate('created_at','=',$time)->sum('Quantity');
+//------------------------------------------------------------------
+     return response()->json(['allres'=>$res,'allorder'=>$delv,'allreqest'=>$total,'todayres'=>$res_today,'todayorder'=>$delv_today,'todayreqest'=>$total_today]);
+    }
+
 
 
 
